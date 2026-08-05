@@ -7,6 +7,7 @@ import {
 } from './utils/image-cutter';
 import { buildStickerPackZip } from './utils/zip-builder';
 import { GenerateStickerPackDto } from './dto/generate-sticker-pack.dto';
+import { OrdersService } from '../orders/orders.service';
 
 export interface GeneratedPack {
   zipStream: PassThrough;
@@ -15,7 +16,15 @@ export interface GeneratedPack {
 
 @Injectable()
 export class StickersService {
-  async generatePack(sourceBuffer: Buffer, dto: GenerateStickerPackDto): Promise<GeneratedPack> {
+  constructor(
+    private readonly ordersService: OrdersService,
+  ) {}
+
+  async generatePack(
+    sourceBuffer: Buffer,
+    dto: GenerateStickerPackDto,
+    userId?: string,  // 登錄用戶才有
+  ): Promise<GeneratedPack> {
     try {
       dto.validateCount();
     } catch (err) {
@@ -35,6 +44,13 @@ export class StickersService {
     ]);
 
     const zipStream = buildStickerPackZip({ mainImage, tabImage, tiles });
+
+    // 如果有登錄就建立訂單記錄
+    if (userId) {
+      await this.ordersService.create(userId, {
+        totalAmount: 0,
+      });
+    }
 
     return { zipStream, tileCount: tiles.length };
   }

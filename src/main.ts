@@ -6,9 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors();
-
-  const port = process.env.PORT ?? 4000;
-  await app.listen(port);
-  console.log(`Sticker API is running at http://localhost:${port}`);
+  await app.listen(process.env.PORT ?? 4000);
+  console.log(`貼圖製作API已啟動：http://localhost:${process.env.PORT ?? 4000}`);
 }
 bootstrap();
