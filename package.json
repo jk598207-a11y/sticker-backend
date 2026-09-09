@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.4.0",
+    "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^10.4.0",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^10.4.0",
     "@nestjs/typeorm": "^11.0.3",
+    "@paypal/paypal-server-sdk": "^2.4.0",
     "archiver": "^7.0.1",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
