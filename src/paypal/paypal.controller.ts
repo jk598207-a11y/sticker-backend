@@ -14,19 +14,30 @@ export class PaypalController {
     @Body()
     body: {
       orderId: string;
-      currency?: string;
     },
   ) {
-    const user = req.user as any;
+    const user = req.user as { id: string };
 
-    return this.paypalService.createOrder(body.orderId, user.id, body.currency);
+    return this.paypalService.createOrder(
+      body.orderId,
+      user.id,
+    );
   }
 
   @Post("capture-order")
   @UseGuards(AuthGuard("jwt"))
-  captureOrder(@Req() req: Request, @Body() body: { orderId: string }) {
-    const user = req.user as any;
+  captureOrder(
+    @Req() req: Request,
+    @Body()
+    body: {
+      orderId: string;
+    },
+  ) {
+    const user = req.user as { id: string };
 
-    return this.paypalService.captureOrder(body.orderId, user.id);
+    return this.paypalService.captureOrder(
+      body.orderId,
+      user.id,
+    );
   }
 }

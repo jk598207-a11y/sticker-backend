@@ -11,6 +11,7 @@ import { Order } from "./orders/orders.entity";
 import { StickerPreset } from "./presets/presets.entity";
 import { PaypalModule } from "./paypal/paypal.module";
 import { ConfigModule } from "@nestjs/config";
+import { ExportsModule } from './exports/exports.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ConfigModule } from "@nestjs/config";
     OrdersModule,
     PresetsModule,
     PaypalModule,
+    ExportsModule,
   ],
 })
 export class AppModule {}

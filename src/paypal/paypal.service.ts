@@ -30,16 +30,20 @@ export class PaypalService {
   async createOrder(
     orderId: string,
     userId: string,
-    currency = "TWD",
   ) {
     // 從自己的資料庫取得訂單
-    const order = await this.ordersService.findByIdForUser(
+    const order = await this.ordersService.findPendingByIdForUser(
       orderId,
       userId,
     );
 
     // 使用資料庫裡的金額，不信任前端傳入的 amount
     const amount = Number(order.totalAmount).toFixed(2);
+    console.log("目前付款訂單 ID：", order.id);
+    console.log("資料庫訂單金額：", order.totalAmount);
+
+    // 幣別由後端固定，不信任前端傳入的 currency
+    const currency = "TWD";
 
     const collect = {
       body: {
@@ -57,8 +61,28 @@ export class PaypalService {
     };
 
     // 建立 PayPal 訂單
-    const response =
-      await this.ordersController.createOrder(collect);
+  // 建立 PayPal 訂單
+let response;
+
+try {
+  response = await this.ordersController.createOrder(collect);
+} catch (error: unknown) {
+  console.error("PayPal Create Order 失敗");
+
+  if (error && typeof error === "object") {
+    const err = error as {
+      statusCode?: number;
+      body?: unknown;
+      message?: string;
+    };
+
+    console.error("HTTP 狀態碼：", err.statusCode);
+    console.error("PayPal 錯誤內容：", err.body);
+    console.error("錯誤訊息：", err.message);
+  }
+
+  throw error;
+}
 
     const result = response.result;
 

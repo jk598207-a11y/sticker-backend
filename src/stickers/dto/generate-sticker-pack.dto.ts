@@ -1,4 +1,4 @@
-import { IsInt, IsArray, IsOptional, IsBoolean, Min } from 'class-validator';
+import { IsInt, IsArray, IsOptional, IsBoolean, IsString, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 const ALLOWED_COUNTS = [8, 16, 24, 32, 40];
@@ -26,6 +26,10 @@ export class GenerateStickerPackDto {
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === true)
   isCustom?: boolean;
+
+  @IsOptional()
+  @IsString()
+  orderId?: string;
 
   validateCount(): void {
     if (this.isCustom) return;
